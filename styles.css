@@ -1,0 +1,144 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(
+    90deg,
+    #41175a 0%,
+    #ca81f5 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.container {
+  border: 0px solid #fff;
+  padding: 30px 40px;
+  width: 40%;
+  min-width: 500px;
+}
+
+.new-task-container {
+  background-color: #fff;
+  padding: 30px 20px;
+  border-radius: 0px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+}
+
+.new-task-container input {
+  flex: 3;
+  font-size: 1rem;
+  border: 2px solid #d1d3d4;
+  border-radius: 5px;
+  padding: 12px;
+  font-weight: 500;
+}
+
+.new-task-container input:focus {
+  outline: none;
+  border-color: #ca81f5;
+}
+
+.new-task-button {
+  flex: 1;
+  border-radius: 5px;
+  font-weight: 500;
+  height: 100%;
+  font-size: 1rem;
+  border: none;
+  background-color: #ca81f5;
+  color: #fff;
+  padding: 12px;
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+.tasks-container {
+  background-color: #fff;
+  padding: 30px 20px;
+  margin-top: -40px;
+  border-radius: 0px;
+  width: 100%;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  margin-top: 6px;
+}
+
+.task-item i {
+  background-color: #ca81f5;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 5px;
+}
+
+.task-item i:hover {
+  cursor: pointer;
+}
+
+.task-item i:hover {
+  opacity: 0.8;
+}
+
+.task-item p {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+}
+
+.task-item p {
+  flex: 1;
+}
+
+.task-item i {
+  margin-left: 8px;
+}
+
+
+.task-item input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.task-item {
+  gap: 8px;
+}
+
+
+.error {
+  border: 2px solid red !important;
+}
+
+.error::placeholder {
+  color: red;
+}
+
+.completed {
+  text-decoration: line-through;
+}
