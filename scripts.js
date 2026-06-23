@@ -40,4 +40,27 @@ const createAnimeCard = (anime) => {
     </div>
   `;
   tasksContainer.appendChild(card);
+}
+
+const traduzirStatus = (status) => {
+  const mapa = {
+    current: "Em andamento",
+    finished: "Finalizado",
+    upcoming: "Em breve",
+    tba: "A ser anunciado"
+  };
+  return mapa[status] || status;
 };
+  
+const handleAddtask = async () => {
+  const query = inputElement.value.trim();
+
+  if (query.length === 0) {
+    inputElement.classList.add("error");
+    return;
+}
+
+  inputElement.classList.remove("error");
+  tasksContainer.innerHTML = "<p class=`loading`>Buscando</p>";
+
+  
