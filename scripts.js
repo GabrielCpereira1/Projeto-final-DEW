@@ -2,171 +2,42 @@ const inputElement = document.querySelector(".new-task-input");
 const addTaskButton = document.querySelector(".new-task-button");
 const tasksContainer = document.querySelector(".tasks-container");
 
-
-
-const validateInput = () => {
-  return inputElement.value.trim().length > 0;
-};
-
-const handleInputChange = () => {
-  const inputIsValid = validateInput();
-
-  if (inputIsValid) {
-    inputElement.classList.remove("error");
-  }
-};
-
-
-
-const createTaskElement = (taskDescription, isCompleted = false) => {
-  const taskItemContainer = document.createElement("div");
-  taskItemContainer.classList.add("task-item");
-
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.checked = isCompleted;
-
-  const taskContent = document.createElement("p");
-  taskContent.innerText = taskDescription;
+const searchAnime = async (query) => {
+  const url = `https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=8`;
   
-  if (isCompleted) {
-    taskContent.classList.add("completed");
-  }
-
-
-
-checkbox.addEventListener("change", () => {
-    taskContent.classList.toggle("completed");
-    updateLocalStorage();
+  const response = await fetch(url, {
+    headers: { "Accept": "application/vnd.api+json" }
   });
-
-  taskContent.addEventListener("click", () => {
-    handleTaskClick(taskContent);
-  });
-
-   taskContent.addEventListener("click", () => {
-    taskContent.classList.toggle("completed");
-    checkbox.checked = taskContent.classList.contains("completed");
-    updateLocalStorage();
-  });
-
-
-
-  const editItem = document.createElement("i");
-  editItem.classList.add("far", "fa-edit");
-
-  editItem.addEventListener("click", () => {
-    handleEditTask(taskContent);
-  });
-
-  const deleteItem = document.createElement("i");
-  deleteItem.classList.add("far", "fa-trash-alt");
-
-  deleteItem.addEventListener("click", () => {
-    handleDeleteTask(taskItemContainer);
-  });
-
-  
-   taskItemContainer.appendChild(checkbox);
-   taskItemContainer.appendChild(taskContent);
-   taskItemContainer.appendChild(editItem);
-   taskItemContainer.appendChild(deleteItem);
-
-  tasksContainer.appendChild(taskItemContainer);
+  const data = await response.json();
+  return data.data;
 };
 
+const createAnimeCard = (anime) => {
+  const attr = anime.attributes;
 
+  const titulo    = attr.canonicalTitle || "Sem título";
+  const sinopse   = attr.synopsis ? attr.synopsis.slice(0, 200) + "..." : "Sem sinopse.";
+  const poster    = attr.posterImage?.medium || "";
+  const status    = attr.status || "tba";
+  const episodios = attr.episodeCount || "?";
+  const inicio    = attr.startDate || "?";
+  const nota      = attr.averageRating ? (attr.averageRating / 10).toFixed(1) : "?";
 
-const handleAddTask = () => {
-  const inputIsValid = validateInput();
+  const card = document.createElement("div");
+  card.classList.add("task-item", "anime-card");
 
-  if (!inputIsValid) {
-    inputElement.classList.add("error");
-    return;
-  }
-
-  createTaskElement(inputElement.value);
-
-  inputElement.value = "";
-
-  updateLocalStorage();
+  card.innerHTML = `
+    ${poster ? `<img src="${poster}" alt="${titulo}" class="anime-poster" />` : ""}
+    <div class="anime-info">
+      <h3 class="anime-title">${titulo}</h3>
+      <p class="anime-sinopse">${sinopse}</p>
+      <div class="anime-detalhes">
+        <span><i class="fas fa-tv"></i> ${episodios} eps</span>
+        <span><i class="fas fa-calendar"></i> ${inicio}</span>
+        <span><i class="fas fa-star"></i> ${nota}/10</span>
+        <span class="status-badge status-${status}">${traduzirStatus(status)}</span>
+      </div>
+    </div>
+  `;
+  tasksContainer.appendChild(card);
 };
-
-const handleTaskClick = (taskContent) => {
-  taskContent.classList.toggle("completed");
-
-  updateLocalStorage();
-};
-
-const handleDeleteTask = (taskItemContainer) => {
-  taskItemContainer.remove();
-
-  updateLocalStorage();
-};
-
-
-
-/* 
-   save local das coisa
-*/
-
-const updateLocalStorage = () => {
-  const tasks = tasksContainer.children;
-
-  const localStorageTasks = [...tasks].map((task) => {
-    const content = task.firstChild;
-
-    return {
-      description: content.innerText,
-      isCompleted: content.classList.contains("completed"),
-    };
-  });
-
-  localStorage.setItem("tasks", JSON.stringify(localStorageTasks));
-};
-
-const refreshTasksUsingLocalStorage = () => {
-  const tasksFromLocalStorage = JSON.parse(
-    localStorage.getItem("tasks")
-  );
-
-  if (!tasksFromLocalStorage) return;
-
-  for (const task of tasksFromLocalStorage) {
-    createTaskElement(task.description, task.isCompleted);
-  }
-};
-
-
-
-/* 
-   butao
-*/
-
-addTaskButton.addEventListener("click", () => {
-  handleAddTask();
-});
-
-inputElement.addEventListener("input", () => {
-  handleInputChange();
-});
-
-inputElement.addEventListener("keyup", (event) => {
-  if (event.key === "Enter") {
-    handleAddTask();
-  }
-});
-
-const handleEditTask = (taskContent) => {
-  const newText = prompt("Editar tarefa:", taskContent.innerText);
-
-  if (!newText || newText.trim().length === 0) return;
-
-  taskContent.innerText = newText.trim();
-
-  updateLocalStorage();
-};
-
-
-
-refreshTasksUsingLocalStorage();
