@@ -44,10 +44,10 @@ const createAnimeCard = (anime) => {
 
 const traduzirStatus = (status) => {
   const mapa = {
-    current: "Em andamento",
+    current: "Andamento",
     finished: "Finalizado",
-    upcoming: "Em breve",
-    tba: "A ser anunciado"
+    upcoming: "Anunciado",
+    tba: "Não-Anunciado"
   };
   return mapa[status] || status;
 };
