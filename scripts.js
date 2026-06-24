@@ -3,7 +3,7 @@ const addTaskButton = document.querySelector(".new-task-button");
 const tasksContainer = document.querySelector(".tasks-container");
 
 const searchAnime = async (query) => {
-  const url = `https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=8`;
+  const url = `https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=3`;
   
   const response = await fetch(url, {
     headers: { "Accept": "application/vnd.api+json" }
@@ -61,6 +61,21 @@ const handleAddtask = async () => {
 }
 
   inputElement.classList.remove("error");
-  tasksContainer.innerHTML = "<p class=`loading`>Buscando</p>";
+  tasksContainer.innerHTML = "<p class=`loading`>Buscando...</p>";
 
-  
+  const animes = await searchAnime(query);
+  tasksContainer.innerHTML = "";
+
+  if (!animes || animes.length === 0) {
+    tasksContainer.innerHTML = "<p class='loading'>Nenhum anime encontrado.</p>";
+    return;
+  }
+
+  animes.forEach(createAnimeCard);
+};
+
+addTaskButton.addEventListener("click", handleAddtask);
+
+inputElement.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") handleAddtask();
+});

@@ -143,3 +143,9 @@ body {
   text-decoration: line-through;
 }
 
+.anime-poster {
+  width: 100px;
+  min-width: 100px;
+  object-fit: fill;
+  height: 150px;
+}
