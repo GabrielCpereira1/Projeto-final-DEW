@@ -7,6 +7,8 @@ const limparHistoricoBtn = document.getElementById("limparHistoricoBtn");
 const API_URL =
   "https://6a3d9cbfd8e212699e240877.mockapi.io/catalogo-animes/historico";
 
+
+
 const searchAnime = async (query) => {
   const url = `https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=3`;
 
@@ -68,8 +70,28 @@ const createAnimeCard = (anime) => {
         <span>⭐ ${nota}/10</span>
         <span>${traduzirStatus(status)}</span>
       </div>
+
+      <button class="recomendar-btn" data-titulo="${titulo}">✨ Recomendar similares</button>
+      <div class="recomendacoes-box" style="display:none;"></div>
     </div>
   `;
+
+  card.querySelector(".recomendar-btn").addEventListener("click", async (e) => {
+    const btn = e.target;
+    const box = card.querySelector(".recomendacoes-box");
+
+    btn.disabled = true;
+    btn.textContent = "Buscando recomendações...";
+    box.style.display = "none";
+    box.innerHTML = "";
+
+    const recomendacoes = await buscarRecomendacoesIA(titulo);
+
+    box.innerHTML = recomendacoes;
+    box.style.display = "block";
+    btn.textContent = "✨ Recomendar similares";
+    btn.disabled = false;
+  });
 
   tasksContainer.appendChild(card);
 };
@@ -83,6 +105,39 @@ const traduzirStatus = (status) => {
   };
 
   return mapa[status] || status;
+};
+
+
+
+const buscarRecomendacoesIA = async (tituloAnime) => {
+  try {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer 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",
+      },
+      body: JSON.stringify({
+        model: "openrouter/free",
+        messages: [
+          {
+            role: "user",
+            content: `Recomende 3 animes similares a "${tituloAnime}". Para cada um, dê o nome e uma frase curta explicando por que é similar. Responda em português, de forma simples e direta, sem introdução. Use este formato exato para cada anime:
+🎌 Nome do Anime — Motivo da recomendação.`,
+          },
+        ],
+      }),
+    });
+
+    const data = await response.json();
+    const texto = data.choices[0].message.content;
+
+    const linhas = texto.trim().split("\n").filter(l => l.trim());
+    return linhas.map(l => `<p class="recomendacao-item">${l}</p>`).join("");
+  } catch (erro) {
+    console.error("Erro na IA:", erro);
+    return "<p>Não foi possível buscar recomendações.</p>";
+  }
 };
 
 
@@ -120,6 +175,8 @@ inputElement.addEventListener("keydown", (event) => {
   }
 });
 
+
+
 const carregarHistorico = async () => {
   try {
     const response = await fetch(API_URL);
@@ -132,7 +189,7 @@ const carregarHistorico = async () => {
       return;
     }
 
-  
+    
     dados.reverse().forEach((item) => {
       const li = document.createElement("li");
       li.classList.add("historico-item");
