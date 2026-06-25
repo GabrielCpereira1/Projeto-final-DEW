@@ -149,3 +149,91 @@ body {
   object-fit: fill;
   height: 150px;
 }
+
+
+.historico-section {
+  background-color: #fff;
+  padding: 20px;
+  margin-top: 16px;
+  border-radius: 0px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.historico-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.historico-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #41175a;
+}
+
+.limpar-historico-btn {
+  font-size: 0.78rem;
+  font-family: "Poppins", sans-serif;
+  background: none;
+  border: 1.5px solid #ca81f5;
+  color: #ca81f5;
+  border-radius: 5px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.limpar-historico-btn:hover {
+  background: #ca81f5;
+  color: #fff;
+}
+
+.historico-lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.historico-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 5px;
+  background: #f7f0fd;
+  font-size: 0.88rem;
+  color: #41175a;
+  font-weight: 500;
+}
+
+.historico-item span.data {
+  font-size: 0.75rem;
+  color: #a060c8;
+  font-weight: 400;
+}
+
+.historico-item .deletar-btn {
+  background: none;
+  border: none;
+  color: #ca81f5;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.historico-item .deletar-btn:hover {
+  color: #41175a;
+}
+
+.historico-vazio {
+  font-size: 0.85rem;
+  color: #aaa;
+  text-align: center;
+  padding: 10px 0;
+}
